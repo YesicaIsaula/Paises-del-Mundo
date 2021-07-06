@@ -1,7 +1,7 @@
 // LINK DE API
 const api = "https://restcountries.eu";
 
-const fetchpaises = async () => {
+export const fetchpaises = async () => {
     const endpoint = `${api}/rest/v2/all`;
 
     const response = await fetch(endpoint);
@@ -12,5 +12,16 @@ const fetchpaises = async () => {
     return data;
 }
 
-export default fetchpaises;
+export const busquedaPais = async (name) => {
+    try {
+    const endpoint = `${api}/rest/v2/name/${name}`;
+
+    const response = await fetch(endpoint);
+    const data = await response.json();
+
+    return data;
+    } catch(error){
+        console.log(error);
+    }
+}
 

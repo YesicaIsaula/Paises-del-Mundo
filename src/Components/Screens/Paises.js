@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, ScrollView } from "react-native";
-import { Button, Card } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import { Searchbar } from 'react-native-paper';
-import fetchpaises from '../../api';
+import { fetchpaises }from '../../api';
 
-const nombresPaises = ({navigation, route}) => {
+const nombresPaises = ({navigation}) => {
   const [data, setData] = useState(null);
-  
+  const [name, setSearch] = useState("");
 
     const getData = async () => {
       const response = await fetchpaises();
@@ -18,20 +18,21 @@ const nombresPaises = ({navigation, route}) => {
       getData();
     }, []);
 
-
   return ( 
       <ScrollView style={styles.container}>
-        <Searchbar  placeholder="Busque un pais"/>
-        {data && data.map((country) => {
+         <Searchbar placeholder="Buscar un pais por nombre ..." 
+          value={name} onChangeText={setSearch} 
+          onIconPress={() => navigation.navigate("Resultados", {name})}/>
+          {data && data.map((country) => {
           return (
           <Card key = {country.numericCode}>
             <Text style={styles.titulo}>{country.name}</Text>
-            <Card.Image source={country.flag}/>
+            <Card.Image style={styles.bandera} source={country.flag}/>
             <Card.Divider/>
-            <Text>CODIGO DE PAIS: {country.alpha2Code}</Text>
-            <Text>CAPITAL: {country.capital}</Text>
-            <Text>POBLACION: {country.population}</Text>
-            <Text>CONTINENTE: {country.region}</Text>
+            <Text style={styles.texto}>Codigo de Pais: {country.alpha2Code}</Text>
+            <Text style={styles.texto}>Capital: {country.capital}</Text>
+            <Text style={styles.texto}>Población: {country.population} personas</Text>
+            <Text style={styles.texto}>Continente: {country.region}</Text>
           </Card>
           );
         })}
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#B7CBBF"
+    backgroundColor: "#dbc61a"
   },
 
   titulo: {
@@ -54,8 +55,12 @@ const styles = StyleSheet.create({
   },
 
   texto: {
-    fontSize: 15,
+    fontSize: 15
   },
+
+  bandera: {
+    borderWidth: 1,
+  }
 });
 
 export default nombresPaises;
